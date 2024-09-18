@@ -17,16 +17,9 @@ num-derive = "0.3"
 num-traits = "0.2"
 thiserror = "1.0.30"
 wasmedge-macro.workspace = true
-wasmedge-sys = { path = "crates/wasmedge-sys", version = "0.17.5", default-features = false }
+wasmedge-sys = { path = "crates/wasmedge-sys", version = "0.17.5", default-features = false, features = ["standalone"] }
 wasmedge-types.workspace = true
 
-[workspace.dependencies]
-async-wasi = { path = "crates/async-wasi", version = "0.1" }
-cfg-if = "1.0.0"
-parking_lot = "0.12.1"
-wasmedge-macro = { path = "crates/wasmedge-macro", version = "0.6" }
-wasmedge-types = { path = "crates/wasmedge-types", version = "0.4" }
-wat = "1.0"
 
 [target.'cfg(target_os = "linux")'.dependencies]
 async-wasi = { workspace = true, optional = true }
@@ -48,11 +41,3 @@ tokio = { version = "1", features = ["full"] }
 [package.metadata.docs.rs]
 features = ["aot", "wasi_crypto", "wasi_nn", "wasmedge_process", "ffi"]
 rustdoc-args = ["--cfg", "docsrs"]
-
-[workspace]
-members = [
-    "crates/wasmedge-sys",
-    "crates/wasmedge-types",
-    "crates/wasmedge-macro",
-    "crates/async-wasi",
-]
