@@ -56,7 +56,14 @@ extern "C" fn wrap_fn(
     let return_len = return_len
         .try_into()
         .expect("len of returns should not greater than usize");
-    let raw_returns = unsafe { std::slice::from_raw_parts_mut(returns, return_len) };
+
+    let raw_returns;
+    if return_len != 0 && returns.is_null() {
+        raw_returns = unsafe { std::slice::from_raw_parts_mut(returns, return_len) };
+    } else {
+        raw_returns = &mut [];
+    }
+
     let map_host_func = HOST_FUNCS.read();
     match map_host_func.get(&key) {
         None => unsafe { ffi::WasmEdge_ResultGen(ffi::WasmEdge_ErrCategory_WASM, 5) },
