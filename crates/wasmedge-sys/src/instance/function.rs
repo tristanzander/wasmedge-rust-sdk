@@ -57,12 +57,12 @@ extern "C" fn wrap_fn(
         .try_into()
         .expect("len of returns should not greater than usize");
 
-    let raw_returns;
-    if return_len != 0 && returns.is_null() {
-        raw_returns = unsafe { std::slice::from_raw_parts_mut(returns, return_len) };
+    let mut empty_return = [];
+    let raw_returns = if returns.is_null() || return_len == 0 {
+        &mut empty_return
     } else {
-        raw_returns = &mut [];
-    }
+        unsafe { std::slice::from_raw_parts_mut(returns, return_len) }
+    };
 
     let map_host_func = HOST_FUNCS.read();
     match map_host_func.get(&key) {
